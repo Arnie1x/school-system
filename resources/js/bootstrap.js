@@ -1,6 +1,8 @@
 import _ from 'lodash';
 window._ = _;
 
+import * as bootstrap from 'bootstrap'
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -26,10 +28,37 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: import.meta.env.VITE_PUSHER_APP_KEY,
-//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-//     wsHost: import.meta.env.VITE_PUSHER_HOST ? import.meta.env.VITE_PUSHER_HOST : `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
+//     wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
 //     wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
 //     wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+// Extend Tooltip to add color options
+bootstrap.Tooltip.prototype.show = (original => {
+    return function addTooltipColor() {
+      if (this._config.toggle === 'tooltip') {
+        if (this._element.getAttribute('data-color')) {
+          const str = `tooltip-${this._element.getAttribute('data-color')}`
+          this.getTipElement().classList.add(str)
+        }
+      }
+      original.apply(this)
+    }
+  })(bootstrap.Tooltip.prototype.show)
+  
+  // Extend Popover to add color options
+  bootstrap.Popover.prototype.show = (original => {
+    return function addPopoverColor() {
+      if (this._config.toggle === 'popover') {
+        if (this._element.getAttribute('data-color')) {
+          const str = `popover-${this._element.getAttribute('data-color')}`
+          this.getTipElement().classList.add(str)
+        }
+      }
+      original.apply(this)
+    }
+  })(bootstrap.Popover.prototype.show)
+  
+  export { bootstrap }
